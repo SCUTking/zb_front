@@ -14,34 +14,12 @@
             <label>用户名：{{User.userName}}</label>
           </el-row>
           <el-divider/>
-          <el-row class="user-info-fullInfo">
-            <label>推流地址: {{pushUrl}}</label><br/>
-            <label>推流密钥：{{User.streamWord}}</label><br/>
-          </el-row>
+<!--          <el-row class="user-info-fullInfo">-->
+<!--            <label>推流地址: {{pushUrl}}</label><br/>-->
+<!--            <label>推流密钥：{{User.streamWord}}</label><br/>-->
+<!--          </el-row>-->
         </el-card>
         <br/>
-        <!-- 直播间信息 -->
-        <el-card v-if="createdLive" v-show="tab===2">
-          <div slot="header" class="clearfix">
-            <span>直播间信息</span>
-          </div>
-          <el-row style="text-align: center">
-            <el-upload action="/api/student/upload/image"  accept=".jpg,.png" :show-file-list="false">
-              <el-avatar class="el-dropdown-avatar" :size="100" :src="form.roomImage"></el-avatar>
-            </el-upload>
-          </el-row>
-          <el-row class="user-info-userName">
-            <label>房间名称：{{roomsMessage[0].roomName}}</label>
-          </el-row>
-          <el-divider/>
-          <el-row class="user-info-fullInfo">
-            <label>简介：{{roomsMessage[0].roomContent}}</label><br/>
-            <label>类型：{{roomsMessage[0].roomType}}</label><br/>
-            <label>开播时间：{{roomsMessage[0].startTime}}</label><br/>
-
-
-          </el-row>
-        </el-card>
         <br/>
         <!-- 自习室信息 -->
         <el-card v-if="createdStudy" v-show="tab===3">
@@ -54,11 +32,11 @@
             </el-upload>
           </el-row>
           <el-row class="user-info-userName">
-            <label>房间名称：{{studyRoomToShow.studyRoomName}}</label>
+            <label>面试会议名称：{{studyRoomToShow.studyRoomName}}</label>
           </el-row>
           <el-divider/>
           <el-row class="user-info-fullInfo">
-            <label>房间id:{{studyRoomToShow.studyRoomId}}</label><br/>
+            <label>面试会议id:{{studyRoomToShow.studyRoomId}}</label><br/>
             <label>简介：{{studyRoomToShow.studyRoomIntroduction}}</label><br/>
             <label>类型：{{studyRoomToShow.studyRoomType}}</label><br/>
 
@@ -83,33 +61,34 @@
 
             </el-tab-pane>
 
-            <!-- 我的直播间选项卡 -->
-            <el-tab-pane label="我的直播间" name="update">
+            <!-- 我的面试选项卡 -->
+            <el-tab-pane label="预约面试" name="update">
               <el-form :model="form" ref="form" label-width="100px">
-                <el-form-item label="房间名称*" >
-                  <el-input v-model="form.roomName" placeholder="请输入房间的名称"></el-input>
+                <el-form-item label="面试会议名称*" >
+                  <el-input v-model="form.roomName" placeholder="面试会议名称"></el-input>
                 </el-form-item>
-                  <el-form-item label="直播类型：">
-                  <el-select v-model="form.roomType" placeholder="请选择直播的类型">
-                    <el-option label="游戏" value="游戏"></el-option>
-                    <el-option label="学习" value="学习"></el-option>
-                    <el-option label="健身" value="健身"></el-option>
-                    <el-option label="助眠" value="助眠"></el-option>
-                    <el-option label="教育" value="教育"></el-option>
-                    <el-option label="美妆" value="美妆"></el-option>
-                    <el-option label="舞蹈" value="舞蹈"></el-option>
-                    <el-option label="其他" value="其他"></el-option>
-                  </el-select>
+                  <el-form-item label="预约人信息：">
+                    <el-input v-model="form.roomType" placeholder="请输入的预约人信息"></el-input>
+<!--                  <el-select v-model="form.roomType" placeholder="请选择面试的类型">-->
+<!--                    <el-option label="游戏" value="游戏"></el-option>-->
+<!--                    <el-option label="学习" value="学习"></el-option>-->
+<!--                    <el-option label="健身" value="健身"></el-option>-->
+<!--                    <el-option label="助眠" value="助眠"></el-option>-->
+<!--                    <el-option label="教育" value="教育"></el-option>-->
+<!--                    <el-option label="美妆" value="美妆"></el-option>-->
+<!--                    <el-option label="舞蹈" value="舞蹈"></el-option>-->
+<!--                    <el-option label="其他" value="其他"></el-option>-->
+<!--                  </el-select>-->
                 </el-form-item>
-                <el-form-item label="直播简介*" >
-                <el-input type="textarea" v-model="form.roomContent" placeholder="请输入对该房间的简介，让观众更加了解你的直播间"></el-input>
+                <el-form-item label="面试简介*" >
+                <el-input type="textarea" v-model="form.roomContent" placeholder="请输入对该面试会议的简介，让观众更加了解你的面试"></el-input>
               </el-form-item>
-              <el-form-item label="开播时间*">
+              <el-form-item label="开始时间*">
                 <el-date-picker
                   v-model="form.startTime"
                   type="datetime"
                   value-format="yyyy-MM-dd HH:mm:ss"
-                  placeholder="选择开播时间">
+                  placeholder="选择开始时间">
                 </el-date-picker>
                 </el-form-item>
                 <el-form-item label="封面图片" >
@@ -128,86 +107,30 @@
                 </el-form-item>
               </el-form>
             </el-tab-pane>
-            <el-tab-pane label="我的自习室" name="studyRoomMsg" @select="tab=2">
-               <!-- 创建自习室 -->
- <el-button type="primary" @click="listVisible=true">创建自习室</el-button>
-              <!-- 我创建的自习室 -->
-              <div>
-                <div class="title">
-                  我创建的自习室
-                </div>
-                <div class="box">
-
-
-                <div @click="manageStudyRoom(item.studyRoomId)" class="box2" v-for="(item,index) in studyRoomBeCreated" :key="index">
-                  <img class="image" :src="item.studyRoomImageName">
-                  <div>
-                    <div>自习室名称：{{item.studyRoomName}}</div>
-                    <div> 类型：{{item.studyRoomType}}</div>
-                    <div> 成员人数：{{item.studyRoomMemberNumber}}</div>
-                    <div class="time">创建时间：{{item.createTime}}</div>
-
-                  </div>
-                </div>
-
-              </div>
-              <br>
-              <hr>
-              <br>
-              </div>
-          <!-- 我加入的自习室 -->
-              <div>
-                <div class="title">
-                  我加入的自习室
-                </div>
-                <div class="box">
-                <div  @click="SelectQuitStudyRoom(item)"  class="box2" v-for="(item,index) in studyRoomBeJoined" :key="index">
-                  <img  class="image" :src="item.studyRoomImageName">
-                  <div>
-                    <div >自习室名称：{{item.studyRoomName}}</div>
-                    <div> 类型：{{item.studyRoomType}}</div>
-                    <div> 成员人数：{{item.studyRoomMemberNumber}}</div>
-                    <div class="time">创建时间：{{item.createTime}}</div>
-
-                  </div>
-                </div>
-              </div>
-
-              </div>
-            </el-tab-pane>
           </el-tabs>
         </el-card>
       </el-col>
     </el-row>
 
-<!-- 创建直播间和自习室 -->
-        <!-- 创建直播间 -->
-        <el-button type="primary" @click="dialogVisible=true">创建直播间</el-button>
-        <!-- 创建直播间的对话框 -->
-        <el-button type="primary" @click="beginZhibo()">开始直播</el-button>
+<!-- 创建面试和自习室 -->
+        <!-- 创建面试 -->
+        <el-button type="primary" @click="dialogVisible=true">创建面试</el-button>
+        <!-- 创建面试的对话框 -->
+<!--        <el-button type="primary" @click="beginZhibo()">开始面试</el-button>-->
         <el-dialog
-  title="创建直播间"
+  title="创建面试"
   :visible.sync="dialogVisible"
   width="30%">
-  <!-- 创建直播间的表单 -->
+  <!-- 创建面试的表单 -->
   <el-form ref="form" :model="form" label-width="80px">
-  <el-form-item label="房间名称*" >
-    <el-input v-model="form.roomName" placeholder="请输入房间的名称"></el-input>
+  <el-form-item label="面试会议名称*" >
+    <el-input v-model="form.roomName" placeholder="请输入面试会议的名称"></el-input>
   </el-form-item>
-  <el-form-item label="直播类型*">
-    <el-select v-model="form.roomType" placeholder="请选择直播的类型">
-      <el-option label="游戏" value="游戏"></el-option>
-      <el-option label="学习" value="学习"></el-option>
-      <el-option label="健身" value="健身"></el-option>
-      <el-option label="助眠" value="助眠"></el-option>
-      <el-option label="教育" value="教育"></el-option>
-      <el-option label="美妆" value="美妆"></el-option>
-      <el-option label="舞蹈" value="舞蹈"></el-option>
-      <el-option label="其他" value="其他"></el-option>
-    </el-select>
+  <el-form-item label="面试类型*">
+    <el-input v-model="form.roomType" placeholder="请输入面试会议的名称"></el-input>
   </el-form-item>
-  <el-form-item label="直播简介*" >
-    <el-input type="textarea" v-model="form.roomContent" placeholder="请输入对该房间的简介，让观众更加了解你的直播间"></el-input>
+  <el-form-item label="面试简介*" >
+    <el-input type="textarea" v-model="form.roomContent" placeholder="请输入对该面试会议的简介，让观众更加了解你的面试"></el-input>
   </el-form-item>
   <el-form-item label="开播时间*">
     <el-date-picker
@@ -233,111 +156,13 @@
     <el-button type="primary" @click="onSubmit">立即创建</el-button>
   </el-form-item>
 </el-form>
-
 </el-dialog>
 
-        <!-- 创建自习室的对话框 -->
-        <el-dialog
-  title="创建自习室"
-  :visible.sync="listVisible"
-  width="30%">
-  <!-- 创建自习室的表单 -->
-  <el-form ref="form" :model="studyRoom" label-width="80px">
-  <el-form-item label="名称*" >
-    <el-input v-model="studyRoom.studyRoomName" placeholder="请输入自习室的名称"></el-input>
-  </el-form-item>
-  <el-form-item label="类型*">
-    <el-select v-model="studyRoom.studyRoomType" placeholder="请选择的类型">
-      <el-option label="公共自习室" value="公共自习室"></el-option>
-      <el-option label="团队自习室" value="团队自习室"></el-option>
-      <el-option label="情侣自习室" value="情侣自习室"></el-option>
-    </el-select>
-  </el-form-item>
-  <el-form-item label="简介*" >
-    <el-input type="textarea" v-model="studyRoom.studyRoomIntroduction" placeholder="请输入对该自习室的简介，让观众更加了解你的自习室"></el-input>
-  </el-form-item>
-  <el-form-item label="密码" >
-    <el-input type="textarea" v-model="studyRoom.studyRoomPassword" placeholder="请输入自习室的密码（若这不是公共自习室）"></el-input>
-  </el-form-item>
-    <el-form-item label="封面图片" >
-      <el-upload
-  class="avatar-uploader"
-  action="http://localhost:10010/storage/image/upload"
-  :show-file-list="false"
-  :on-success="handleAvatarSuccess"
-  :before-upload="beforeAvatarUpload">
-  <img v-if="imageUrl" :src="imageUrl" class="avatar">
-  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-</el-upload>
-  </el-form-item>
-
-
-  <el-form-item>
-    <el-button type="primary" @click="createStudyRoom">立即创建</el-button>
-  </el-form-item>
-</el-form>
-</el-dialog>
-
-
-<!-- 自习室信息的对话框 -->
-<div>
-  <el-dialog
-  title="自习室信息"
-  :visible.sync="dialogVisible2"
-  width="30%">
-  <div>
-    <img class="image" :src="studyRoomToShow.studyRoomImageName">
-
-    <div>
-      <div class="box">
-        更新图片:
-        <el-upload
-  class="avatar-uploader"
-  action="http://localhost:10010/storage/image/upload"
-  :show-file-list="false"
-  :on-success="handleAvatarSuccess2"
-  :before-upload="beforeAvatarUpload2">
-  <img v-if="imageUrl2" :src="imageUrl2" class="avatar">
-  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-</el-upload>
-      </div>
-
-      <div class="box">自习室名称：<el-input class="inputBox" v-model="studyRoomToShow.studyRoomName">
-
-      </el-input></div>
-
-      <div class="box"> 类型&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      <el-select v-model="studyRoomToShow.studyRoomType" placeholder="请选择的类型">
-      <el-option label="公共自习室" value="公共自习室"></el-option>
-      <el-option label="团队自习室" value="团队自习室"></el-option>
-      <el-option label="情侣自习室" value="情侣自习室"></el-option>
-    </el-select>
-    </div>
-
-      <div class="time box">简介：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   <el-input type="textarea" class="inputBox" v-model="studyRoomToShow.studyRoomIntroduction">
-      </el-input></div>
-    </div>
-  </div>
-    <el-button @click="dialogVisible2 = false">取 消</el-button>
-    <el-button type="primary" @click="updateStudyRoomMessage">更新自习室信息</el-button>
-    <el-button type="danger" @click="deleteStudyRoomCreated">删除自习室</el-button>
-
-</el-dialog>
-</div>
-
-<!-- 退出自习室的对话框 -->
-<el-dialog
-  title="提示"
-  :visible.sync="showQuitStudyRoom"
-  width="30%">
-  <span slot="footer" class="dialog-footer">
-    <el-button @click="showQuitStudyRoom = false">取 消</el-button>
-    <el-button type="primary" @click="QuitStudyRoom">退出该自习室</el-button>
-  </span>
-</el-dialog>
-
-
-
+    <el-dialog
+      :title="mianshiId"
+      :visible.sync="created"
+      width="30%">
+    </el-dialog>
 
 
 </div>
@@ -352,20 +177,21 @@ export default {
         return {
             User:{},//用户信息
             userImageUrl:"",//请求用户图片信息的url
-
-            //创建直播间的表单信息
+          created:false,
+          mianshiId:"面试会议Id为：",
+            //创建面试的表单信息
             form: {
                 roomName: '',
                 roomContent:"",
                 roomType:"",
                 startTime:"",
-                roomImage:"",//房间的封面图
+                roomImage:"",//面试会议的封面图
 
             },
-            imageUrl:"",//直播封面图，页面展示部分
+            imageUrl:"",//面试封面图，页面展示部分
             roomsMessage:{
 
-            },//用户的所有直播间的信息
+            },//用户的所有面试的信息
             masterId:"",
             pushUrl:"",
             streamWord:"",
@@ -383,7 +209,7 @@ export default {
             allStudyRoom:{},//获取的所有自习室的信息
             // 一些用来控制显示的变量
             listVisible:false,//是否显示创建自习室对话框
-            dialogVisible: false,//是否显示创建直播间对话框
+            dialogVisible: false,//是否显示创建面试对话框
             private:false,//是否显示输入密码，如果不是选public在显示
             createdLive:false,
             createdStudy:false,
@@ -423,6 +249,7 @@ export default {
               })
               .then(res=>{
                 console.log(res)
+                this.created=true
                   this.$message({
                       message:"创建自习室成功!",
                       type:"success"
@@ -440,7 +267,7 @@ export default {
 
               })
       },
-      // 更新直播间信息
+      // 更新面试信息
       upDate(){
         if(this.form.roomName==""||this.form.roomContent==""||this.form.roomType==""
         ||this.form.startTime==""){
@@ -452,7 +279,7 @@ export default {
             if(time>time2){
                 alert("开播时间不能小于当前时间")
             }
-            //一切安好，发送创建直播间请求
+            //一切安好，发送创建面试请求
             else{
                 this.$axios({
                     method:"put",
@@ -461,7 +288,7 @@ export default {
                 })
                 .then(res=>{
                     this.$message({
-                        message:"更新直播间成功!",
+                        message:"更新面试成功!",
                         type:"success"
                     })
                     //关闭对话框
@@ -472,12 +299,12 @@ export default {
                     this.form.roomType="";
                     this.form.roomImage="";
                     this.form.startTime="";
-                    //获取直播间信息
+                    //获取面试信息
                     this.getUserRoomMessage();
                 })
                 .catch(res=>{
                     this.$message({
-                        message:"创建直播间失败"+res,
+                        message:"创建面试失败"+res,
                         type:"error"
                     })
                 })
@@ -546,7 +373,7 @@ export default {
                 console.log("获取用户信息失败"+res)
             })
         },
-        // 获取直播间的信息
+        // 获取面试的信息
         async getUserRoomMessage(){
             this.$axios({
                 method:"get",
@@ -579,7 +406,7 @@ export default {
         }
         return isLt2M;
       },
-      //提交创建直播间信息
+      //提交创建面试信息
       onSubmit(){
         if(this.form.roomName==""||this.form.roomContent==""||this.form.roomType==""
         ||this.form.startTime==""){
@@ -591,7 +418,7 @@ export default {
             if(time>time2){
                 alert("开播时间不能小于当前时间")
             }
-            //一切安好，发送创建直播间请求
+            //一切安好，发送创建面试请求
             else{
                 this.$axios({
                     method:"post",
@@ -600,9 +427,13 @@ export default {
                 })
                 .then(res=>{
                     this.$message({
-                        message:"创建直播间成功!",
+                        message:"创建面试成功!",
                         type:"success"
                     })
+                  console.log(res.data.data.roomId)
+                  console.log(res)
+                  this.created=true
+                  this.mianshiId+=res.data.data.roomId
                     //关闭对话框
                     this.dialogVisible=false;
                     //清空表单信息
@@ -611,12 +442,12 @@ export default {
                     this.form.roomType="";
                     this.form.roomImage="";
                     this.form.startTime="";
-                    //获取直播间信息
+                    //获取面试信息
                     this.getUserRoomMessage();
                 })
                 .catch(res=>{
                     this.$message({
-                        message:"创建直播间失败"+res,
+                        message:"创建面试失败"+res,
                         type:"error"
                     })
                 })
@@ -624,7 +455,7 @@ export default {
         }
 
       },
-      //调转到直播间页面
+      //调转到面试页面
       enterRoom(pullUrl){
         this.$router.push({
             path:"/myliveroom",
@@ -632,9 +463,9 @@ export default {
         })
 
       },
-      //开始直播
+      //开始面试
       beginZhibo(){
-        alert("页面直播功能尚未开放，请自行使用obs推流")
+        alert("页面面试功能尚未开放，请自行使用obs推流")
       },
       //获取该用户创建的所有自习室
       getStudyRoomWhichCreatedByUser(){
@@ -669,7 +500,7 @@ export default {
       },
       //管理我创建的自习室
       manageStudyRoom(studyRoomId){
-        //根据这个房间号去获取房间信息
+        //根据这个面试会议号去获取面试会议信息
         this.$axios({
           method:"get",
           url:"/studyRoom/getStudyRoomMessage?studyRoomId="+studyRoomId

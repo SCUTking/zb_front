@@ -1,48 +1,56 @@
 <template>
     <div class="bigBox">
         <div>
-            <div>查询到的自习室为</div>
-            <div>
-                <div class="box4">
-            <!-- 展示所有自习室 -->
-            <div  v-for="(item,index) in studyRoomList"
-             :key="index" 
-             @click="enterRoom(item.studyRoomId)">
-                        <img
-                    :src="item.studyRoomImageName"
-                    class="learnRoomImage2"
-                    >
-                    <div class="text2">
-                        <div>{{item.studyRoomName}}
-                            <nobr class="roomType">{{item.studyRoomType}}</nobr>
-                        </div>
-                        <div>自习室在线人数：{{item.studyRoomMemberNumber}}</div>
-                        <div class="learnRoomHostText">{{item.studyRoomIntroduction}}</div>
-                        <div class="learnRoomHostText">{{item.userName}}的自习室  {{item.createTime}}
-                            
-                        </div>
-                    </div>
-                    </div>
-
-
+          <div>查询到的面试会议为</div>
+          <div class="text1" >
+            <img class="picture" :src="room.roomImage" />
+            <div>开始时间：{{room.startTime}}</div>
+            <div>面试名称：{{room.roomName}}</div>
+            <div>{{room.roomType}}预约的面试</div>
+            <el-button @click="joinRoom(room.roomId)" type="Primary">同意预约面试</el-button>
+          </div>
         </div>
-            </div>
+<!--            <div>-->
+<!--                <div class="box4">-->
+<!--            &lt;!&ndash; 展示所有自习室 &ndash;&gt;-->
+<!--            <div  v-for="(item,index) in studyRoomList"-->
+<!--             :key="index"-->
+<!--             @click="enterRoom(item.studyRoomId)">-->
+<!--                        <img-->
+<!--                    :src="item.studyRoomImageName"-->
+<!--                    class="learnRoomImage2"-->
+<!--                    >-->
+<!--                    <div class="text2">-->
+<!--                        <div>{{item.studyRoomName}}-->
+<!--                            <nobr class="roomType">{{item.studyRoomType}}</nobr>-->
+<!--                        </div>-->
+<!--                        <div>自习室在线人数：{{item.studyRoomMemberNumber}}</div>-->
+<!--                        <div class="learnRoomHostText">{{item.studyRoomIntroduction}}</div>-->
+<!--                        <div class="learnRoomHostText">{{item.userName}}的自习室  {{item.createTime}}-->
+
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    </div>-->
+
+
+<!--        </div>-->
+<!--            </div>-->
         </div>
 
 
           <!-- 加入自习室，填写密码的对话框 -->
-  <el-dialog
-  title="请输入自习室的密码（若是公共自习室，请直接点击确定按钮）"
-  :visible.sync="dialogVisible"
-  width="30%">
-  <el-input type="text" placeholder="请输入自习室的密码" v-model="password"></el-input>
-  <span slot="footer" class="dialog-footer">
-    <el-button @click="dialogVisible = false">取 消</el-button>
-    <el-button type="primary" @click="enterRoom2()">确 定</el-button>
-  </span>
-</el-dialog>
+<!--  <el-dialog-->
+<!--  title="请输入自习室的密码（若是公共自习室，请直接点击确定按钮）"-->
+<!--  :visible.sync="dialogVisible"-->
+<!--  width="30%">-->
+<!--  <el-input type="text" placeholder="请输入自习室的密码" v-model="password"></el-input>-->
+<!--  <span slot="footer" class="dialog-footer">-->
+<!--    <el-button @click="dialogVisible = false">取 消</el-button>-->
+<!--    <el-button type="primary" @click="enterRoom2()">确 定</el-button>-->
+<!--  </span>-->
+<!--</el-dialog>-->
 
-    </div>
+
 </template>
 
 <script>
@@ -53,23 +61,47 @@ export default {
             studyRoomList:[],//自习室列表
             dialogVisible:false,//是否打开输入密码界面
             password:"",//输入的密码
+          room:""
         }
     },
     methods:{
         //查询自习室
+      joinRoom(roomId){
+        this.$axios({
+          url:"/liveRoom/joinRoom?roomId="+this.inputText,
+          method:"post"
+        })
+          .then((res) => {
+
+            console.log(res)
+
+            this.$data.room=res.data.data
+            // this.studyRoomList=res.data.data;
+            // //重新封装图片
+            // for(let i=0;i<this.studyRoomList.length;i++){
+            //     this.studyRoomList[i].studyRoomImageName="/api/storage/image/getImage?imageUrl="
+            //     +this.studyRoomList[i].studyRoomImageName
+            // }
+
+          })
+      },
         queryStudyRoom(){
             this.$axios({
-                url:"/search/queryStudyRoomToElasticSearch?keyword="+this.inputText,
+                url:"/liveRoom/getOneRoom?roomId="+this.inputText,
                 method:"get"
             })
             .then((res) => {
-                this.studyRoomList=res.data.data;
-                //重新封装图片
-                for(let i=0;i<this.studyRoomList.length;i++){
-                    this.studyRoomList[i].studyRoomImageName="/api/storage/image/getImage?imageUrl="
-                    +this.studyRoomList[i].studyRoomImageName
-                }
-                
+
+              console.log(res)
+
+              this.$data.room=res.data.data
+                // this.studyRoomList=res.data.data;
+                // //重新封装图片
+                // for(let i=0;i<this.studyRoomList.length;i++){
+                //     this.studyRoomList[i].studyRoomImageName="/api/storage/image/getImage?imageUrl="
+                //     +this.studyRoomList[i].studyRoomImageName
+                // }
+
             })
         },
              //调转到直播间页面
@@ -164,6 +196,10 @@ export default {
     margin-top: 20px;
     text-align: left;
 }
+.picture{
+  height: 100px;
+  width: 100px;
+}
 .roomType{
     color: 	#00FFFF;
     border-style: groove;
@@ -175,5 +211,9 @@ export default {
     width: 240px;
     height: 155px;
     cursor: pointer;
+}
+.text1{
+  font-family: "华文楷体";
+  font-size: 0.5em;
 }
 </style>

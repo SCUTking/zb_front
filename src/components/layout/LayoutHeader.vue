@@ -9,14 +9,14 @@
         <!-- 左边的 首页 热门 等等 -->
         <div class="header-left">
             <el-link :underline="false" @click="routeToIndex">
-                无领导讨论
+                面试搜索
             </el-link>
             <el-link :underline="false" @click="routeToLiveroom">
                 结构化面试
             </el-link>
-            <el-link :underline="false" @click="routeToVideoroom">
-                视频
-            </el-link>
+<!--            <el-link :underline="false" @click="routeToVideoroom">-->
+<!--                视频-->
+<!--            </el-link>-->
 
         </div>
         <!-- 中间的 -->
@@ -42,9 +42,9 @@
             <el-link :underline="false" @click="routeToPerson">
                 个人中心
             </el-link>
-            <el-button type="primary" @click="beginLearn">
-                开始学习
-            </el-button>
+<!--            <el-button type="primary" @click="beginLearn">-->
+<!--                开始学习-->
+<!--            </el-button>-->
         </div>
 
 

@@ -73,7 +73,7 @@
 
         </el-row>
         <br>
-        <div class="title1">所有无领导讨论房间</div>
+        <div class="title1"></div>
         <div class="box4">
             <!-- 展示所有自习室 -->
             <div  v-for="(item,index) in imgArr3"
@@ -97,16 +97,16 @@
 
 
         </div>
-      <!-- 分页器 -->
-     <div class="block page">
-    <el-pagination
-      @current-change="handleCurrentChange"
-      :current-page.sync="currentPage2"
-      :page-size="10"
-      layout="prev, pager, next, jumper"
-      :total="totalPage">
-    </el-pagination>
-  </div>
+<!--      &lt;!&ndash; 分页器 &ndash;&gt;-->
+<!--     <div class="block page">-->
+<!--    <el-pagination-->
+<!--      @current-change="handleCurrentChange"-->
+<!--      :current-page.sync="currentPage2"-->
+<!--      :page-size="10"-->
+<!--      layout="prev, pager, next, jumper"-->
+<!--      :total="totalPage">-->
+<!--    </el-pagination>-->
+<!--  </div>-->
 
 
 

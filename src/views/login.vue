@@ -22,7 +22,7 @@
     />
 
         <div class="loginBox">
-          <i class="el-icon-s-platform text" > 寒窗自习室登录界面</i>
+          <i class="el-icon-s-platform text" > 面试ING登录界面</i>
 
 
             <el-form ref="form" label-width="80px" class="loginContainer">
@@ -153,9 +153,12 @@ export default {
             data:Data,
           })
           .then(res=>{
+
+            console.log(res)
             if(res.data.code==1){
               //将通行证存放到localStorage中
-              localStorage.setItem("authentication",res.data.data)
+              localStorage.setItem("authentication",res.data.data.token)
+              localStorage.setItem("userId",res.data.data.userId)
               this.getUserMessage();
               this.$router.push(
                 {

@@ -4,7 +4,7 @@
         <el-row :gutter="10">
         <el-col :xs="8" :sm="6" :md="4" :lg="3" :xl="1">
             <div class="grid-content bg-purple">
-                测试
+                我的面试
             </div>
         </el-col>
         </el-row>
@@ -12,19 +12,21 @@
     <div class="flex flexwrap">
         <div v-for="(item,index) in liveRoomList" :key="index" class="liveroom">
 
-<div class="text1"  @click="enterRoom(item.pullUrl)">
-    <img class="picture" :src="item.roomImage" />
-<div>房间名称：{{item.roomName}}</div>
-<div>类型：{{item.roomType}}</div>
+<div class="text1" >
+  <img class="picture" :src="item.roomImage" />
+  <div>开始时间：{{item.startTime}}</div>
+<div>面试名称：{{item.roomName}}</div>
+<div>{{item.roomType}}预约的面试</div>
+  <el-button @click="enterRoom(item.roomId)" type="Primary">开始面试</el-button>
 </div>
 </div>
-    <div class="liveroom"@click="navigateToBasicAbilityTest">
-      <div class="text1">
-        <div>基础要素能力测试</div>
-        <div>点击进行测试</div>
-      </div>
-      <el-button @click="navigateToBasicAbilityTest" type="Primary">开始测试</el-button>
-    </div>
+<!--    <div class="liveroom"@click="navigateToBasicAbilityTest">-->
+<!--      <div class="text1">-->
+<!--        <div>面试</div>-->
+<!--        <div>面试官：</div>-->
+<!--      </div>-->
+
+<!--    </div>-->
     </div>
 
     </div>
@@ -47,7 +49,7 @@ export default {
         getAllLiveRoomToLook(){
             this.$axios({
                 method:"get",
-                url:"/liveRoom/getAllLiveRoomToLook"
+                url:"/liveRoom/getLiveroomByUserId"
             })
             .then(res=>{
                 console.log(res.data)
@@ -63,10 +65,10 @@ export default {
             })
         },
      //调转到直播间页面
-      enterRoom(pullUrl){
+      enterRoom(roomId){
         this.$router.push({
             path:"/myliveroom",
-            query: {pullUrl:pullUrl}
+            query: {roomId:roomId}
         })
       },
 
@@ -77,22 +79,11 @@ export default {
           })
       },
 
-      navigateToBasicAbilityTest() {
-        // 假设这是要展示的图片 URL
-        const imageUrl = './R.jpg'
-
-        // 导航到展示图片的页面
-        this.$router.push({
-          //path: '/basic-ability-test',
-          path:'/ImageDisplay',
-          query: { imageUrl }
-        })
-      }
     },
 
     mounted(){
         //获取所有直播视频流
-        //this.getAllLiveRoomToLook();
+        this.getAllLiveRoomToLook();
         //this.navigateToLiveRoomPage('dafaultPullUrl');
     }
 }
